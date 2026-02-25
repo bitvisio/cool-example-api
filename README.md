@@ -106,12 +106,12 @@ Optional:
 
 1. **Build the Docker image**:
    ```sh
-   docker build -t Cool-example-api:1.0.0 .
+   docker build -t cool-example-api:1.0.0 .
    ```
 
 2. **Run the Docker container**:
    ```sh
-   docker run --name Cool-example-api -p 5000:5000 -t Cool-example-api:1.0.0
+   docker run --name cool-example-api -p 5000:5000 -t cool-example-api:1.0.0
    ```
 
 3. **Access the API documentation**:
@@ -165,9 +165,9 @@ Optional:
 ### **Environment-Specific Overlays**
 - **QA**:
   - `deployment-patch.yaml`: Sets replicas to 1 and environment to `qa`.
-  - `ingress.yaml`: Configures Ingress for `qa.Cool-api.example.fi`.
+  - `ingress.yaml`: Configures Ingress for `qa.cool-api.example.fi`.
 - **Production**:
   - `deployment-patch.yaml`: Sets replicas to 2 and environment to `production`.
-  - `ingress.yaml`: Configures Ingress for `prod.Cool-api.example.fi`.
+  - `ingress.yaml`: Configures Ingress for `prod.cool-api.example.fi`.
 
 ---

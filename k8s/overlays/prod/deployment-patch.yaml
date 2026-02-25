@@ -13,7 +13,7 @@ spec:
         environment: prod
     spec:
       imagePullSecrets:
-      - name: Cool-api-prod
+      - name: cool-api-prod
       containers:
       - name: REPO_NAME
         env:
