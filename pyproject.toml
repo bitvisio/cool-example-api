@@ -1,0 +1,13 @@
+[project]
+name = "Cool-API-Template"
+version = "1.0.0"
+description = "A simple template for Cool API applications."
+
+readme = "README.md"
+requires-python = ">=3.11"
+
+[project.dependencies]
+dependencies = "requirements.txt"
+
+[project.optional-dependencies]
+dev-requirements = {file = "dev-requirements.txt"}

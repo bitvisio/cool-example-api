@@ -1,0 +1,53 @@
+name: Deploy - PROD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_production:
+    runs-on: [ prod-managed-small ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      
+      - name: Install toml module
+        run: |
+          python -m pip install toml
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.20.0'
+
+      - name: Create .kube directory
+        run: |
+          mkdir -p $HOME/.kube
+  
+      - name: Decode KUBECONFIG_PROD
+        run: echo "${{ secrets.KUBECONFIG_PROD }}" | base64 --decode > $HOME/.kube/config
+
+      - name: Get version from pyproject.toml and set it as a env variable
+        id: get_version
+        run: |
+          VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Replace image placeholder in manifest
+        run: |
+          sed -i "s|REPO_NAME:version|${{ secrets.ARTIFACTORY_URL }}/${{ vars.REPO_NAME }}:${{ env.VERSION }}|g" k8s/base/deployment.yaml
+        
+      - name: Replace repository name placeholders
+        run: |
+          find k8s/ -type f -name "*.yaml" -exec sed -i "s|REPO_NAME|${{ vars.REPO_NAME }}|g" {} +
+      
+      - name: Apply Kubernetes manifests
+        run: |
+          kubectl apply -k k8s/overlays/prod

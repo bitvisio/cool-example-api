@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: REPO_NAME
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      environment: qa
+  template:
+    metadata:
+      labels:
+        environment: qa
+    spec:
+      imagePullSecrets:
+      - name: Cool-api-dev
+      containers:
+      - name: REPO_NAME
+        env:
+        - name: ENVIRONMENT
+          value: "qa"

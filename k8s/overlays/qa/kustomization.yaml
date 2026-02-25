@@ -1,0 +1,13 @@
+namespace: park-kube-apps-datadev
+
+bases:
+  - ../../base
+
+patchesStrategicMerge:
+  - deployment-patch.yaml
+  - service-patch.yaml
+
+resources:
+  - ingress.yaml
+
+namePrefix: qa-
