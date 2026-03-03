@@ -1,11 +1,17 @@
 import uuid
-from typing import List
+from typing import List, Dict
 from src.model.message import Message
 from src.model.msg_payload import MsgPayload
 
 class MessageService:
     def __init__(self):
         self.messages_list: List[Message] = []
+
+    def test(self) -> Dict[str, str]:
+        return {
+            "message": "GET /api/test, API is working",
+            "status": "success"
+        }
 
     def add_message(self, payload: MsgPayload) -> Message:
         # Generate a UUID for the msg_id
