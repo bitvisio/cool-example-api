@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy_production:
-    runs-on: [ prod-managed-small ]
+    runs-on: [ prod1 ]
 
     steps:
       - name: Checkout repository
