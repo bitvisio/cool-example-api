@@ -1,4 +1,4 @@
-namespace: park-kube-apps-datadev
+namespace: kube-apps
 
 bases:
   - ../../base
