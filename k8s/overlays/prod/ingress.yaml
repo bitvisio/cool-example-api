@@ -5,8 +5,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: prod-api.cool.testcompany.net
-    http:
+  - host: prod-api.cool.noterm.app
       paths:
       - path: /api
         pathType: Prefix
