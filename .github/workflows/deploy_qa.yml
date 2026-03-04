@@ -27,6 +27,7 @@ jobs:
         run: |
           PYTHONPATH=./ pytest test/api/test_message_api.py
           PYTHONPATH=./ pytest test/service/test_message_service.py
+          PYTHONPATH=./ pytest test/utils/test_helper.py
 
   build_and_push:
     runs-on: [ ubuntu-latest ]
