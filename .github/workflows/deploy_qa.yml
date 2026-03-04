@@ -31,6 +31,9 @@ jobs:
   build_and_push:
     runs-on: [ ubuntu-latest ]
     needs: test
+    permissions:
+      contents: write
+      packages: write
 
     outputs:
       VERSION: ${{ steps.get_version.outputs.VERSION }}
