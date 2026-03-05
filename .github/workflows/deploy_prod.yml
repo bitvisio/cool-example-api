@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   deploy_production:
-    runs-on: [ prod1 ]
+    runs-on: [ ubuntu-latest ]
 
     steps:
       - name: Checkout repository

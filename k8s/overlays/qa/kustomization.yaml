@@ -1,7 +1,11 @@
-namespace: park-kube-apps-datadev
+namespace: kube-apps-qa
 
 bases:
   - ../../base
+
+commonLabels:
+  app: cool-example-api
+  env: qa
 
 patchesStrategicMerge:
   - deployment-patch.yaml

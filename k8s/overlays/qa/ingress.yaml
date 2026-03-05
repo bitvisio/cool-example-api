@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: REPO_NAME-ingress
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   rules:
-  - host: dev-api.cool.testcompany.net
+  - host: qa-api.noterm.app
     http:
       paths:
       - path: /api
