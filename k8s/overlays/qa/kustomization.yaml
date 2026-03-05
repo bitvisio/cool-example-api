@@ -1,7 +1,11 @@
-namespace: kube-apps
+namespace: kube-apps-qa
 
 bases:
   - ../../base
+
+commonLabels:
+  app: cool-example-api
+  env: qa
 
 patchesStrategicMerge:
   - deployment-patch.yaml

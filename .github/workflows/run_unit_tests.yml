@@ -1,0 +1,30 @@
+name: Run unit tests
+
+on:
+  pull_request:
+    branches: [ "test" ]
+  workflow_dispatch:
+    
+jobs:
+  test:
+    runs-on: [ ubuntu-latest ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r dev-requirements.txt
+
+      - name: Run tests
+        run: |
+          PYTHONPATH=./ pytest test/api/test_message_api.py
+          PYTHONPATH=./ pytest test/service/test_message_service.py
+          PYTHONPATH=./ pytest test/utils/test_helper.py
