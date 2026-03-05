@@ -59,7 +59,7 @@ This repository provides a template for building and deploying FastAPI-based app
 
 ## **Getting Started**
 
-### **1. Prerequisites**
+### **Prerequisites**
 - Python 3.11 or higher
   
 Optional:
@@ -70,21 +70,7 @@ Optional:
 
 ---
 
-### **5. Running Tests**
-
-**Run API tests**:
-   ```sh
-   PYTHONPATH=./ pytest test/api/test_message_api.py
-   ```
-
-**Run service tests**:
-   ```sh
-   PYTHONPATH=./ pytest test/service/test_message_service.py
-   ```
-
----
-
-### **2. Running the Application Locally**
+### **Running the Application Locally**
 
 1. **Install dependencies**:
    ```sh
@@ -102,7 +88,7 @@ Optional:
 
 ---
 
-### **3. Running the Application with Docker**
+### **Running the Application with Docker**
 
 1. **Build the Docker image**:
    ```sh
@@ -116,6 +102,33 @@ Optional:
 
 3. **Access the API documentation**:
    - Swagger UI: [http://localhost:5000/docs](http://localhost:5000/docs)
+
+---
+
+### **Running automated tests**
+
+#### **Run all tests**:
+
+   ```sh
+   PYTHONPATH=./test pytest
+   ```
+
+#### **Run specific test file**:
+
+**Run API tests**:
+   ```sh
+   PYTHONPATH=./ pytest test/api/test_message_api.py
+   ```
+
+**Run service tests**:
+   ```sh
+   PYTHONPATH=./ pytest test/service/test_message_service.py
+   ```
+
+**Run utils tests**:
+   ```sh
+   PYTHONPATH=./ pytest test/utils/test_helper.py
+   ```
 
 ---
 
@@ -136,9 +149,32 @@ Optional:
      kubectl apply -k k8s/overlays/prod
      ```
 
+#### **Delete environment resources**:
+   - QA (by label):
+     ```sh
+     kubectl delete deployment,service,ingress -l app=cool-example-api -n kube-apps-qa
+     ```
+   - Production (by label):
+     ```sh
+     kubectl delete deployment,service,ingress -l app=cool-example-api -n kube-apps
+     ```
+
+#### **Useful kubectl commands**:
+   ```sh
+   # View all resources in a namespace
+   kubectl get all -n kube-apps
+
+   # View pod logs
+   kubectl logs <pod-name> -n kube-apps
+
+   # Follow pod logs in real-time
+   kubectl logs -f <pod-name> -n kube-apps
+
+   # View pod events (useful for debugging)
+   kubectl describe pod <pod-name> -n kube-apps
+   ```
 
 ---
-
 
 ## **CI/CD Pipelines**
 
@@ -148,11 +184,11 @@ Optional:
 
 ### **QA Deployment**
 - Triggered on pushes to the `test` branch.
-- Runs tests, builds the Docker image, pushes image to Jfrog Artifactory and deploys to the QA environment.
+- Runs tests, builds the Docker image, pushes image to GitHub Container Registry (ghcr.io) and deploys to the QA environment (`kube-apps-qa` namespace).
 
 ### **Production Deployment**
 - Triggered on pushes to the `main` branch.
-- deploys to the production environment.
+- Deploys to the production environment (`kube-apps` namespace).
 
 ---
 
@@ -163,11 +199,13 @@ Optional:
 - `service.yaml`: Exposes the application within the cluster.
 
 ### **Environment-Specific Overlays**
-- **QA**:
+- **QA** (`kube-apps-qa` namespace):
+  - `kustomization.yaml`: Adds `commonLabels` (`app: cool-example-api`, `env: qa`) and `namePrefix: qa-`.
   - `deployment-patch.yaml`: Sets replicas to 1 and environment to `qa`.
-  - `ingress.yaml`: Configures Ingress for `qa.cool-api.example.fi`.
-- **Production**:
+  - `ingress.yaml`: Configures Ingress for `qa-api.app`.
+- **Production** (`kube-apps` namespace):
+  - `kustomization.yaml`: Adds `commonLabels` (`app: cool-example-api`, `env: prod`).
   - `deployment-patch.yaml`: Sets replicas to 2 and environment to `production`.
-  - `ingress.yaml`: Configures Ingress for `prod.cool-api.example.fi`.
+  - `ingress.yaml`: Configures Ingress for `api.app`.
 
 ---
