@@ -43,7 +43,7 @@ jobs:
 
       - name: Replace image placeholder in manifest
         run: |
-          sed -i "s|REPO_NAME:version|${{ secrets.ARTIFACTORY_URL }}/${{ vars.REPO_NAME }}:${{ env.VERSION }}|g" k8s/base/deployment.yaml
+          sed -i "s|REPO_NAME:version|ghcr.io/${{ github.repository_owner }}/${{ vars.REPO_NAME }}:${{ env.VERSION }}|g" k8s/base/deployment.yaml
         
       - name: Replace repository name placeholders
         run: |
