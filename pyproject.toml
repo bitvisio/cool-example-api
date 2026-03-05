@@ -1,6 +1,6 @@
 [project]
 name = "Cool Example API"
-version = "1.0.7"
+version = "1.0.8"
 description = "A simple template for Cool API applications."
 
 readme = "README.md"
