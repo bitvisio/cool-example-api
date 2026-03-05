@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - host: qa-api.cool.noterm.app
+  - host: qa-api.noterm.app
     http:
       paths:
       - path: /api
