@@ -63,3 +63,52 @@ def test_clear_messages(client: TestClient):
     data = response.json()
     assert response.status_code == 200
     assert data == []
+
+
+def test_get_message_by_id(client: TestClient):
+    """Test getting a single message by ID via POST /api/message."""
+    client.delete("/api/messages")
+
+    payload = {"msg": "find me"}
+    add_response = client.post("/api/messages/", json=payload)
+    msg_id = add_response.json()["msg_id"]
+
+    response = client.post("/api/message", json={"msg_id": msg_id})
+    data = response.json()
+
+    assert response.status_code == 200
+    assert data["msg_id"] == msg_id
+    assert data["msg"] == "find me"
+
+
+def test_get_message_not_found(client: TestClient):
+    """Test getting a message with a non-existent ID."""
+    client.delete("/api/messages")
+
+    response = client.post("/api/message", json={"msg_id": "non-existent-id"})
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Message not found"
+
+
+def test_get_message_missing_msg_id(client: TestClient):
+    """Test POST /api/message without msg_id returns 422."""
+    response = client.post("/api/message", json={})
+
+    assert response.status_code == 422
+
+
+def test_get_message_among_multiple(client: TestClient):
+    """Test getting the correct message when multiple exist."""
+    client.delete("/api/messages")
+
+    client.post("/api/messages/", json={"msg": "first"}).json()
+    msg2 = client.post("/api/messages/", json={"msg": "second"}).json()
+    client.post("/api/messages/", json={"msg": "third"}).json()
+
+    response = client.post("/api/message", json={"msg_id": msg2["msg_id"]})
+    data = response.json()
+
+    assert response.status_code == 200
+    assert data["msg_id"] == msg2["msg_id"]
+    assert data["msg"] == "second"

@@ -132,3 +132,28 @@ def test_message_uuid_is_unique(message_service: MessageService):
     
     ids = {msg1.msg_id, msg2.msg_id, msg3.msg_id}
     assert len(ids) == 3  # All IDs should be unique
+
+def test_get_message_by_id(message_service: MessageService):
+    """Test retrieving a single message by its ID."""
+    added = message_service.add_message(MsgPayload(msg="find me"))
+    
+    result = message_service.get_message(added.msg_id)
+    
+    assert result.msg_id == added.msg_id
+    assert result.msg == "find me"
+
+def test_get_message_not_found(message_service: MessageService):
+    """Test retrieving a message with a non-existent ID returns None."""
+    result = message_service.get_message("non-existent-id")
+    assert result is None
+
+def test_get_message_among_multiple(message_service: MessageService):
+    """Test getting the correct message when multiple exist."""
+    message_service.add_message(MsgPayload(msg="first"))
+    msg2 = message_service.add_message(MsgPayload(msg="second"))
+    message_service.add_message(MsgPayload(msg="third"))
+    
+    result = message_service.get_message(msg2.msg_id)
+    
+    assert result.msg_id == msg2.msg_id
+    assert result.msg == "second"
